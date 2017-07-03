@@ -33,6 +33,11 @@ final class TestTemplateExtensionContext extends AbstractExtensionContext<TestTe
 	}
 
 	@Override
+	public TestTemplateExtensionContext createCopy() {
+		return new TestTemplateExtensionContext(super.parent, super.engineExecutionListener, getTestDescriptor());
+	}
+
+	@Override
 	public Optional<AnnotatedElement> getElement() {
 		return Optional.of(getTestDescriptor().getTestMethod());
 	}

@@ -37,6 +37,12 @@ public final class ClassExtensionContext extends AbstractExtensionContext<ClassT
 	}
 
 	@Override
+	public ClassExtensionContext createCopy() {
+		return new ClassExtensionContext(super.parent, super.engineExecutionListener, getTestDescriptor(),
+			this.throwableCollector);
+	}
+
+	@Override
 	public Optional<AnnotatedElement> getElement() {
 		return Optional.of(getTestDescriptor().getTestClass());
 	}

@@ -28,7 +28,13 @@ public final class JupiterEngineExtensionContext extends AbstractExtensionContex
 
 	public JupiterEngineExtensionContext(EngineExecutionListener engineExecutionListener,
 			JupiterEngineDescriptor testDescriptor) {
+
 		super(null, engineExecutionListener, testDescriptor);
+	}
+
+	@Override
+	public JupiterEngineExtensionContext createCopy() {
+		return new JupiterEngineExtensionContext(super.engineExecutionListener, getTestDescriptor());
 	}
 
 	@Override

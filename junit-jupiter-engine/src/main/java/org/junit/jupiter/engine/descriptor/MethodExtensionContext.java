@@ -38,6 +38,12 @@ public final class MethodExtensionContext extends AbstractExtensionContext<Metho
 	}
 
 	@Override
+	public MethodExtensionContext createCopy() {
+		return new MethodExtensionContext(super.parent, super.engineExecutionListener, getTestDescriptor(),
+			this.throwableCollector);
+	}
+
+	@Override
 	public Optional<AnnotatedElement> getElement() {
 		return Optional.of(getTestDescriptor().getTestMethod());
 	}

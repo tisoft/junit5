@@ -252,22 +252,18 @@ class TestInstanceLifecycleTests extends AbstractJupiterTestEngineTests {
 		String afterEachCallbackKey = afterEachCallbackKey(testClass, "outerTest");
 		String nestedBeforeAllCallbackKey = beforeAllCallbackKey(nestedTestClass);
 		String nestedAfterAllCallbackKey = afterAllCallbackKey(nestedTestClass);
-		String outerPostProcessTestInstanceKey1 = postProcessTestInstanceKey(testClass, nestedTestClass,
-			testsInvoked.get(0));
+		// called N times, where N = 3
+		String outerPostProcessTestInstanceKeyN = postProcessTestInstanceKey(testClass, testClass, null);
 		String nestedPostProcessTestInstanceKey1 = postProcessTestInstanceKey(nestedTestClass, nestedTestClass,
 			testsInvoked.get(0));
 		String nestedExecutionConditionKey1 = executionConditionKey(nestedTestClass, testsInvoked.get(0));
 		String nestedBeforeEachCallbackKey1 = beforeEachCallbackKey(nestedTestClass, testsInvoked.get(0));
 		String nestedAfterEachCallbackKey1 = afterEachCallbackKey(nestedTestClass, testsInvoked.get(0));
-		String outerPostProcessTestInstanceKey2 = postProcessTestInstanceKey(testClass, nestedTestClass,
-			testsInvoked.get(1));
 		String nestedPostProcessTestInstanceKey2 = postProcessTestInstanceKey(nestedTestClass, nestedTestClass,
 			testsInvoked.get(1));
 		String nestedExecutionConditionKey2 = executionConditionKey(nestedTestClass, testsInvoked.get(1));
 		String nestedBeforeEachCallbackKey2 = beforeEachCallbackKey(nestedTestClass, testsInvoked.get(1));
 		String nestedAfterEachCallbackKey2 = afterEachCallbackKey(nestedTestClass, testsInvoked.get(1));
-		String outerPostProcessTestInstanceKey3 = postProcessTestInstanceKey(testClass, nestedTestClass,
-			testsInvoked.get(2));
 		String nestedPostProcessTestInstanceKey3 = postProcessTestInstanceKey(nestedTestClass, nestedTestClass,
 			testsInvoked.get(2));
 		String nestedExecutionConditionKey3 = executionConditionKey(nestedTestClass, testsInvoked.get(2));
@@ -288,17 +284,15 @@ class TestInstanceLifecycleTests extends AbstractJupiterTestEngineTests {
 				nestedBeforeAllCallbackKey,
 				nestedAfterAllCallbackKey,
 				nestedExecutionConditionKey1,
-				outerPostProcessTestInstanceKey1,
+				outerPostProcessTestInstanceKeyN,
 				nestedPostProcessTestInstanceKey1,
 				nestedBeforeEachCallbackKey1,
 				nestedAfterEachCallbackKey1,
 				nestedExecutionConditionKey2,
-				outerPostProcessTestInstanceKey2,
 				nestedPostProcessTestInstanceKey2,
 				nestedBeforeEachCallbackKey2,
 				nestedAfterEachCallbackKey2,
 				nestedExecutionConditionKey3,
-				outerPostProcessTestInstanceKey3,
 				nestedPostProcessTestInstanceKey3,
 				nestedBeforeEachCallbackKey3,
 				nestedAfterEachCallbackKey3
@@ -456,7 +450,7 @@ class TestInstanceLifecycleTests extends AbstractJupiterTestEngineTests {
 		String nestedContainerExecutionConditionKey = executionConditionKey(nestedTestClass, null);
 		String nestedTestTemplateKey = testTemplateKey(nestedTestClass, "singletonTest");
 		String postProcessTestInstanceKey = postProcessTestInstanceKey(testClass, testClass, "outerTest");
-		String outerPostProcessTestInstanceKey = postProcessTestInstanceKey(testClass, nestedTestClass, null);
+		String outerPostProcessTestInstanceKey = postProcessTestInstanceKey(testClass, testClass, null);
 		String nestedPostProcessTestInstanceKey = postProcessTestInstanceKey(nestedTestClass, nestedTestClass, null);
 		String beforeAllCallbackKey = beforeAllCallbackKey(testClass);
 		String afterAllCallbackKey = afterAllCallbackKey(testClass);

@@ -32,8 +32,8 @@ import org.junit.platform.engine.reporting.ReportEntry;
 @API(Internal)
 public abstract class AbstractExtensionContext<T extends TestDescriptor> implements ExtensionContext {
 
-	private final ExtensionContext parent;
-	private final EngineExecutionListener engineExecutionListener;
+	protected final AbstractExtensionContext<?> parent;
+	protected final EngineExecutionListener engineExecutionListener;
 	private final T testDescriptor;
 	private final ExtensionValuesStore valuesStore;
 
@@ -47,13 +47,7 @@ public abstract class AbstractExtensionContext<T extends TestDescriptor> impleme
 		this.valuesStore = createStore(parent);
 	}
 
-	private ExtensionValuesStore createStore(AbstractExtensionContext<?> parent) {
-		ExtensionValuesStore parentStore = null;
-		if (parent != null) {
-			parentStore = parent.valuesStore;
-		}
-		return new ExtensionValuesStore(parentStore);
-	}
+	public abstract AbstractExtensionContext<T> createCopy();
 
 	@Override
 	public String getUniqueId() {
@@ -97,6 +91,14 @@ public abstract class AbstractExtensionContext<T extends TestDescriptor> impleme
 	@Override
 	public Set<String> getTags() {
 		return testDescriptor.getTags().stream().map(TestTag::getName).collect(toCollection(LinkedHashSet::new));
+	}
+
+	private static ExtensionValuesStore createStore(AbstractExtensionContext<?> parent) {
+		ExtensionValuesStore parentStore = null;
+		if (parent != null) {
+			parentStore = parent.valuesStore;
+		}
+		return new ExtensionValuesStore(parentStore);
 	}
 
 }
