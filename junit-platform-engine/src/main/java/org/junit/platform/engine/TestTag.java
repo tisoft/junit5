@@ -16,6 +16,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import org.junit.platform.commons.meta.API;
+import org.junit.platform.commons.util.PreconditionViolationException;
 import org.junit.platform.commons.util.Preconditions;
 import org.junit.platform.commons.util.StringUtils;
 
@@ -24,7 +25,7 @@ import org.junit.platform.commons.util.StringUtils;
  * container.
  *
  * @since 1.0
- * @see #isValidTag(String)
+ * @see #isValid(String)
  * @see #create(String)
  */
 @API(Experimental)
@@ -59,7 +60,7 @@ public final class TestTag implements Serializable {
 	 * @see StringUtils#doesNotContainIsoControlCharacter(String)
 	 * @see TestTag#create(String)
 	 */
-	public static boolean isValidTag(String name) {
+	public static boolean isValid(String name) {
 		if (name == null) {
 			return false;
 		}
@@ -73,21 +74,24 @@ public final class TestTag implements Serializable {
 	/**
 	 * Create a {@code TestTag} from the supplied {@code name}.
 	 *
-	 * <p>Consider {@linkplain #isValidTag(String) validating} the syntax of
-	 * the supplied {@code name} before attempting to create a {@code TestTag}
-	 * using this factory method.
+	 * <p>Consider checking whether the syntax of the supplied {@code name}
+	 * is {@linkplain #isValid(String) valid} before attempting to create a
+	 * {@code TestTag} using this factory method.
 	 *
 	 * <p>Note: the supplied {@code name} will be {@linkplain String#trim() trimmed}.
 	 *
-	 * @param name the name of the tag; must not be {@code null} or blank
-	 * @see TestTag#isValidTag(String)
+	 * @param name the name of the tag; must be syntactically <em>valid</em>
+	 * @throws PreconditionViolationException if the supplied tag name is not
+	 * syntactically <em>valid</em>
+	 * @see TestTag#isValid(String)
 	 */
-	public static TestTag create(String name) {
+	public static TestTag create(String name) throws PreconditionViolationException {
 		return new TestTag(name);
 	}
 
 	private TestTag(String name) {
-		Preconditions.notBlank(name, "Tag name must not be null or blank");
+		Preconditions.condition(TestTag.isValid(name),
+			() -> String.format("Tag name [%s] must be syntactically valid", name));
 		this.name = name.trim();
 	}
 

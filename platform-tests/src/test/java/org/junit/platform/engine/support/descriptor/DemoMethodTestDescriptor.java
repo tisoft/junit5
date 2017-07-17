@@ -20,6 +20,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Tag;
 import org.junit.platform.commons.util.ClassUtils;
 import org.junit.platform.commons.util.Preconditions;
+import org.junit.platform.commons.util.StringUtils;
 import org.junit.platform.engine.TestTag;
 import org.junit.platform.engine.UniqueId;
 
@@ -47,7 +48,7 @@ public class DemoMethodTestDescriptor extends AbstractTestDescriptor {
 		// @formatter:off
 		Set<TestTag> methodTags = findRepeatableAnnotations(this.testMethod, Tag.class).stream()
 				.map(Tag::value)
-				.filter(TestTag::isValidTag)
+				.filter(StringUtils::isNotBlank)
 				.map(TestTag::create)
 				.collect(toCollection(LinkedHashSet::new));
 		// @formatter:on
