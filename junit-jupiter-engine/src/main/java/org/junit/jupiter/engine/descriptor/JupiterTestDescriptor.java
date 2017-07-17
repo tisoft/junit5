@@ -64,7 +64,8 @@ public abstract class JupiterTestDescriptor extends AbstractTestDescriptor
 		// @formatter:off
 		return findRepeatableAnnotations(element, Tag.class).stream()
 				.map(Tag::value)
-				.filter(StringUtils::isNotBlank)
+				// TODO Log warning if dropping a tag due to invalid syntax
+				.filter(TestTag::isValidTag)
 				.map(TestTag::create)
 				.collect(toCollection(LinkedHashSet::new));
 		// @formatter:on

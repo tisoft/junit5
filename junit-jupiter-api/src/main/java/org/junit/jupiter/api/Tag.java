@@ -31,6 +31,14 @@ import org.junit.platform.commons.meta.API;
  * a list of tags to be used for the current test plan, potentially
  * dependent on the current environment.
  *
+ * <h3>Syntax Rules for Tags</h3>
+ * <ul>
+ * <li>A tag must not be {@code null}.</li>
+ * <li>A tag must not be blank.</li>
+ * <li>A trimmed tag must not contain whitespace.</li>
+ * <li>A trimmed tag must not contain ISO control characters.</li>
+ * </ul>
+ *
  * @since 5.0
  * @see Tags
  * @see Test

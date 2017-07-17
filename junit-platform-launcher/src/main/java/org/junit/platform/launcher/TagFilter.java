@@ -15,13 +15,10 @@ import static java.util.stream.Collectors.toList;
 import static org.junit.platform.commons.meta.API.Usage.Experimental;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.junit.platform.commons.meta.API;
 import org.junit.platform.commons.util.Preconditions;
-import org.junit.platform.commons.util.StringUtils;
 import org.junit.platform.engine.FilterResult;
-import org.junit.platform.engine.TestDescriptor;
 import org.junit.platform.engine.TestTag;
 
 /**
@@ -52,6 +49,7 @@ public final class TagFilter {
 	 *
 	 * @param tags the included tags; never {@code null} or empty
 	 * @see #includeTags(List)
+	 * @see TestTag
 	 */
 	public static PostDiscoveryFilter includeTags(String... tags) {
 		Preconditions.notNull(tags, "tags array must not be null");
@@ -69,12 +67,13 @@ public final class TagFilter {
 	 *
 	 * @param tags the included tags; never {@code null} or empty
 	 * @see #includeTags(String...)
+	 * @see TestTag
 	 */
 	public static PostDiscoveryFilter includeTags(List<String> tags) {
 		Preconditions.notEmpty(tags, "tags list must not be null or empty");
 		Preconditions.containsNoNullElements(tags, "individual tags must not be null");
-		List<String> trimmedTags = trimmedCopyOf(tags);
-		return descriptor -> FilterResult.includedIf(trimmedTagsOf(descriptor).anyMatch(trimmedTags::contains));
+		List<TestTag> activeTags = toTestTags(tags);
+		return descriptor -> FilterResult.includedIf(descriptor.getTags().stream().anyMatch(activeTags::contains));
 	}
 
 	/**
@@ -88,6 +87,7 @@ public final class TagFilter {
 	 *
 	 * @param tags the excluded tags; never {@code null} or empty
 	 * @see #excludeTags(List)
+	 * @see TestTag
 	 */
 	public static PostDiscoveryFilter excludeTags(String... tags) {
 		Preconditions.notNull(tags, "tags array must not be null");
@@ -105,29 +105,22 @@ public final class TagFilter {
 	 *
 	 * @param tags the excluded tags; never {@code null} or empty
 	 * @see #excludeTags(String...)
+	 * @see TestTag
 	 */
 	public static PostDiscoveryFilter excludeTags(List<String> tags) {
 		Preconditions.notEmpty(tags, "tags list must not be null or empty");
 		Preconditions.containsNoNullElements(tags, "individual tags must not be null");
-		List<String> trimmedTags = trimmedCopyOf(tags);
-		return descriptor -> FilterResult.includedIf(trimmedTagsOf(descriptor).noneMatch(trimmedTags::contains));
+		List<TestTag> activeTags = toTestTags(tags);
+		return descriptor -> FilterResult.includedIf(descriptor.getTags().stream().noneMatch(activeTags::contains));
 	}
 
-	private static List<String> trimmedCopyOf(List<String> tags) {
+	private static List<TestTag> toTestTags(List<String> tags) {
 		// @formatter:off
 		return tags.stream()
-				.filter(StringUtils::isNotBlank)
-				.map(String::trim)
+				// TODO Log warning if dropping a tag due to invalid syntax
+				.filter(TestTag::isValidTag)
+				.map(TestTag::create)
 				.collect(toList());
-		// @formatter:on
-	}
-
-	private static Stream<String> trimmedTagsOf(TestDescriptor descriptor) {
-		// @formatter:off
-		return descriptor.getTags().stream()
-				.map(TestTag::getName)
-				.filter(StringUtils::isNotBlank)
-				.map(String::trim);
 		// @formatter:on
 	}
 

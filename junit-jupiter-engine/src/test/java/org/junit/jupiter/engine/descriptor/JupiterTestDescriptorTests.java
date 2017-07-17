@@ -88,7 +88,7 @@ class JupiterTestDescriptorTests {
 
 		assertEquals(testMethod, descriptor.getTestMethod());
 		assertEquals("custom name", descriptor.getDisplayName(), "display name:");
-		assertThat(descriptor.getTags()).containsExactly(TestTag.create("custom tag"));
+		assertThat(descriptor.getTags()).containsExactly(TestTag.create("custom-tag"));
 	}
 
 	@Test
@@ -192,7 +192,8 @@ class JupiterTestDescriptorTests {
 
 	@Test
 	@DisplayName("custom name")
-	@Tag("custom tag")
+	@Tag("  custom-tag  ")
+	@Tag("tag will be ignored since it contains whitespace")
 	@Target(ElementType.METHOD)
 	@Retention(RetentionPolicy.RUNTIME)
 	@interface CustomTestAnnotation {
