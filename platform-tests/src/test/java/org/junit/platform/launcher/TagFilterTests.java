@@ -30,6 +30,10 @@ import org.junit.platform.engine.support.descriptor.DemoClassTestDescriptor;
 /**
  * Unit tests for {@link TagFilter}.
  *
+ * <p>NOTE: part of the behavior of these tests regarding tags is
+ * influenced by the implementation of {@link DemoClassTestDescriptor#getTags()}
+ * rather than any concrete test engine.
+ *
  * @since 1.0
  */
 class TagFilterTests {
