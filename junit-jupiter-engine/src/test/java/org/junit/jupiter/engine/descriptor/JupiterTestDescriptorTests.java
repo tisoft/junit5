@@ -181,6 +181,7 @@ class JupiterTestDescriptorTests {
 		@DisplayName("custom test name")
 		@Tag("methodTag1")
 		@Tag("methodTag2")
+		@Tag("tag containing whitespace")
 		void foo() {
 		}
 
@@ -193,7 +194,6 @@ class JupiterTestDescriptorTests {
 	@Test
 	@DisplayName("custom name")
 	@Tag("  custom-tag  ")
-	// @Tag("tag will be ignored since it contains whitespace")
 	@Target(ElementType.METHOD)
 	@Retention(RetentionPolicy.RUNTIME)
 	@interface CustomTestAnnotation {

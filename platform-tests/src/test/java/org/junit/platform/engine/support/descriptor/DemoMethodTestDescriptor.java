@@ -16,11 +16,11 @@ import static org.junit.platform.commons.util.AnnotationUtils.findRepeatableAnno
 import java.lang.reflect.Method;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.platform.commons.util.ClassUtils;
 import org.junit.platform.commons.util.Preconditions;
-import org.junit.platform.commons.util.StringUtils;
 import org.junit.platform.engine.TestTag;
 import org.junit.platform.engine.UniqueId;
 
@@ -28,6 +28,8 @@ import org.junit.platform.engine.UniqueId;
  * @since 1.0
  */
 public class DemoMethodTestDescriptor extends AbstractTestDescriptor {
+
+	private static final Logger logger = Logger.getLogger(DemoMethodTestDescriptor.class.getName());
 
 	private final Class<?> testClass;
 	private final Method testMethod;
@@ -48,7 +50,20 @@ public class DemoMethodTestDescriptor extends AbstractTestDescriptor {
 		// @formatter:off
 		Set<TestTag> methodTags = findRepeatableAnnotations(this.testMethod, Tag.class).stream()
 				.map(Tag::value)
-				.filter(StringUtils::isNotBlank)
+				.filter(tag -> {
+					boolean isValid = TestTag.isValid(tag);
+					if (!isValid) {
+						// TODO [#242] Replace logging with precondition check once we have a proper mechanism for
+						// handling validation exceptions during the TestEngine discovery phase.
+						//
+						// As an alternative to a precondition check here, we could catch any
+						// PreconditionViolationException thrown by TestTag::create.
+						logger.warning(String.format(
+							"Configuration error: invalid tag syntax in @Tag(\"%s\") declaration on [%s]. Tag will be ignored.",
+							tag, this.testMethod));
+					}
+					return isValid;
+				})
 				.map(TestTag::create)
 				.collect(toCollection(LinkedHashSet::new));
 		// @formatter:on
