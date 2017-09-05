@@ -22,24 +22,24 @@ import org.junit.platform.commons.meta.API;
 @API(Internal)
 public interface Logger {
 
-	void error(Supplier<String> msgSupplier);
+	void error(Supplier<String> messageSupplier);
 
-	void error(Throwable t, Supplier<String> msgSupplier);
+	void error(Throwable t, Supplier<String> messageSupplier);
 
-	void warn(Supplier<String> msgSupplier);
+	void warn(Supplier<String> messageSupplier);
 
-	void warn(Throwable t, Supplier<String> msgSupplier);
+	void warn(Throwable t, Supplier<String> messageSupplier);
 
-	void info(Supplier<String> msgSupplier);
+	void info(Supplier<String> messageSupplier);
 
-	void info(Throwable t, Supplier<String> msgSupplier);
+	void info(Throwable t, Supplier<String> messageSupplier);
 
-	void debug(Supplier<String> msgSupplier);
+	void debug(Supplier<String> messageSupplier);
 
-	void debug(Throwable t, Supplier<String> msgSupplier);
+	void debug(Throwable t, Supplier<String> messageSupplier);
 
-	void trace(Supplier<String> msgSupplier);
+	void trace(Supplier<String> messageSupplier);
 
-	void trace(Throwable t, Supplier<String> msgSupplier);
+	void trace(Throwable t, Supplier<String> messageSupplier);
 
 }
